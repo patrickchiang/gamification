@@ -2,7 +2,65 @@ var express = require('express');
 var mysql = require('mysql');
 var fs = require('fs');
 var bcrypt = require('bcrypt-nodejs');
+var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
+var session = require('express-session');
 var app = express();
+
+passport.use(new LocalStrategy({
+        usernameField: 'email',
+        passwordField: 'pass'
+    },
+    function (username, password, done) {
+        var sql = "SELECT * FROM users WHERE email = ?";
+        var insert = [username];
+        sql = mysql.format(sql, insert);
+
+        var connection = mysql.createConnection({
+            host: 'localhost',
+            port: 3306,
+            user: 'root',
+            password: 'root',
+            database: 'node'
+        });
+
+        connection.connect();
+
+        connection.query(sql, function (err, results) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(results);
+                if (results == null || results[0] == null)
+                    return done(null, false);
+                if (bcrypt.compareSync(password, results[0].password))
+                    return done(null, results[0]);
+                return done(null, false);
+            }
+            return done(null, false);
+        });
+
+        connection.end();
+    }
+));
+
+passport.serializeUser(function (user, done) {
+    done(null, {
+        user_id: user.user_id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email
+    });
+});
+
+passport.deserializeUser(function (user, done) {
+    done(null, {
+        user_id: user.user_id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email
+    });
+});
+
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({
@@ -10,8 +68,21 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.get('/test', function (req, res) {
-    mysql_query('SHOW DATABASES;', res, true);
+app.use(session({
+    secret: 'keyboard cat',
+    resave: true,
+    saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.post('/test', passport.authenticate('local'), function (req, res) {
+    res.json(req.user);
+});
+
+app.get('/logout', function (req, res) {
+    req.logout();
 });
 
 app.get('/user/:id', function (req, res) {
@@ -41,7 +112,7 @@ app.post('/users', function (req, res) {
 });
 
 app.get('/create', function (req, res) {
-    fs.readFile('creation.sql', 'utf8', function (err,data) {
+    fs.readFile('creation.sql', 'utf8', function (err, data) {
         if (err) {
             return console.log(err);
         }
@@ -52,7 +123,7 @@ app.get('/create', function (req, res) {
 });
 
 app.get('/init', function (req, res) {
-    fs.readFile('init.sql', 'utf8', function (err,data) {
+    fs.readFile('init.sql', 'utf8', function (err, data) {
         if (err) {
             return console.log(err);
         }
@@ -81,7 +152,7 @@ function mysql_query(sql, res, unsafe) {
     connection.query(sql, function (err, results) {
         if (err) {
             console.log(err);
-        } else {
+        } else if (res != null) {
             res.json(results);
         }
     });
