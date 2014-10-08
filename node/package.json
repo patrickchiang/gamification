@@ -1,0 +1,7 @@
+{
+  "name": "node-test",
+  "description": "testing out nodejs",
+  "dependencies": {
+    "express": "4.x"
+  }
+}
