@@ -32,8 +32,15 @@ passport.use(new LocalStrategy({
                 console.log(results);
                 if (results == null || results[0] == null)
                     return done(null, false);
-                if (bcrypt.compareSync(password, results[0].password))
-                    return done(null, results[0]);
+                if (bcrypt.compareSync(password, results[0].password)) {
+                    var user = results[0];
+                    return done(null, {
+                        user_id: user.user_id,
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                        email: user.email
+                    });
+                }
                 return done(null, false);
             }
             return done(null, false);
@@ -44,21 +51,11 @@ passport.use(new LocalStrategy({
 ));
 
 passport.serializeUser(function (user, done) {
-    done(null, {
-        user_id: user.user_id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email
-    });
+    done(null, user);
 });
 
 passport.deserializeUser(function (user, done) {
-    done(null, {
-        user_id: user.user_id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email
-    });
+    done(null, user);
 });
 
 
