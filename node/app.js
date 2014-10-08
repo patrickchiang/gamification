@@ -73,9 +73,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/', express.static(__dirname + '/site'));
 
-app.post('/test', passport.authenticate('local'), function (req, res) {
-    res.json(req.user);
+app.post('/login', passport.authenticate('local'), function (req, res) {
+    res.jsonp(req.user);
 });
 
 app.get('/logout', function (req, res) {
