@@ -62,11 +62,6 @@ app.get('/init', function (req, res) {
     });
 });
 
-
-var server = app.listen(3000, function () {
-    console.log('Listening on port %d', server.address().port);
-});
-
 function mysql_query(sql, res, unsafe) {
     var connection = mysql.createConnection({
         host: 'localhost',
@@ -99,3 +94,7 @@ function mysql_query(sql, res, unsafe) {
         }
     });
 }
+
+var server = app.listen(3000, 'localhost', function () {
+    console.log('Listening on port %d', server.address().port);
+});
