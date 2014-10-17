@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html ng-app="house">
+<head ng-controller="ProblemController">
+    <title>House of Codes - {{problem_header}}</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/problems.css" rel="stylesheet">
+</head>
+<body>
+<div class="col-md-5" ng-controller="ScoreController">
+    <a href="/"><img src="logo.png" alt="logo" class="col-md-12 logo"/></a>
+
+    <div class="profile">
+        <h2 class="scoreboard">{{scores.name}}</h2>
+        <ul class="stats">
+            <li>Completed: {{scores.completed}} done</li>
+            <li>In Progress: {{scores.progress}} doing</li>
+            <li>Points: {{scores.points}} pts</li>
+            <li>Rank: {{scores.rank}} / {{scores.totalRank}}</li>
+            <li>Level: Noob</li>
+        </ul>
+    </div>
+    <div class="controls">
+        <a href="http://www.w3schools.com/" target="_blank" class="btn btn-success">Learn</a>
+        <a href="/discuss" class="btn btn-primary">Discuss</a>
+        <a href="/logout" class="btn btn-danger">Logout</a>
+    </div>
+</div>
+
+<div class="col-md-6" ng-controller="ProblemController">
+    <div class="navigate">
+        <div class="next" ng-if="range.next != 0">
+            <a href="/problem.html?problem={{range.next}}">Next Question <span
+                    class="glyphicon glyphicon-chevron-right"></span></a>
+        </div>
+        <div class="previous" ng-if="range.previous != 0">
+            <a href="/problem.html?problem={{range.previous}}"><span class="glyphicon glyphicon-chevron-left"></span>
+                Previous Question</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 prompt">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <span class="badge status">{{solution_state}}</span>
+                    <span class="label points">{{points}} points</span>
+
+                    <h3 class="panel-title">{{problem_header}}</h3>
+                </div>
+                <div class="panel-body">
+                    <div ng-bind-html="problem_prompt" class="nospace"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 expected">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Expected</h3>
+                </div>
+                <div class="panel-body">
+                    <div ng-bind-html="problem_expected" class="nospace"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 actual">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Actual</h3>
+                </div>
+                <div class="panel-body answer-actual" ng-bind-html="coded2">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 well well-sm" ng-class="debug">{{debug_text}}</div>
+        <div class="col-md-12 answer">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Answer</h3>
+                </div>
+                <div class="panel-body">
+                    <div ng-bind-html="problem_default_before" class="nospace"></div>
+                    <textarea class="form-control ng-pristine ng-valid ng-touched" rows="5"
+                              ng-model="coded" ng-change="changeText()"></textarea>
+
+                    <div ng-bind-html="problem_default_after" class="nospace"></div>
+
+                    <div class="run-button">
+                        <button type="button" class="btn btn-default" ng-click="runTest()">Run & Test</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/angular.min.js"></script>
+<script src="js/angular-sanitize.min.js"></script>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scoreboard.js"></script>
+<script src="js/problems.js"></script>
+</body>
+</html>

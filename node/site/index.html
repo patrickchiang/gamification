@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html ng-app="house">
+<head>
+    <title>House of Codes - Problems</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/problems.css" rel="stylesheet">
+</head>
+<body>
+<div class="col-md-5" ng-controller="ScoreController">
+    <a href="/"><img src="logo.png" alt="logo" class="col-md-12 logo"/></a>
+
+    <div class="profile">
+        <h2 class="scoreboard">{{scores.name}}</h2>
+        <ul class="stats">
+            <li>Completed: {{scores.completed}} done</li>
+            <li>In Progress: {{scores.progress}} doing</li>
+            <li>Points: {{scores.points}} pts</li>
+            <li>Rank: {{scores.rank}} / {{scores.totalRank}}</li>
+            <li>Level: Noob</li>
+        </ul>
+    </div>
+    <div class="controls">
+        <a href="http://www.w3schools.com/" target="_blank" class="btn btn-success">Learn</a>
+        <a href="/discuss" class="btn btn-primary">Discuss</a>
+        <a href="/logout" class="btn btn-danger">Logout</a>
+    </div>
+</div>
+
+<div class="panel-group col-md-6" id="accordion" ng-controller="IndexController">
+    <div class="panel panel-default col-md5">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="panel-link" data-toggle="collapse" data-parent="#collapseOne" href="#collapseOne">
+                    HTML Challenges
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <ul class="list-group">
+                    <a href="/problem.html?problem={{problem.problem_id}}" class="list-group-item" ng-repeat="problem in html_problems">
+                        <span class="badge" ng-if="problem.solution_state != null">{{problem.solution_state}}</span>
+                        {{problem.problem_name}} ({{problem.problem_points}} points)
+                    </a>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="panel-link" data-toggle="collapse" data-parent="#collapseTwo" href="#collapseTwo">
+                    CSS Challenges
+                </a>
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <ul class="list-group">
+                    <a href="/problem.html?problem={{problem.problem_id}}" class="list-group-item" ng-repeat="problem in css_problems">
+                        <span class="badge">{{problem.solution_state}}</span>
+                        {{problem.problem_name}}
+                    </a>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="panel-link" data-toggle="collapse" data-parent="#collapseThree" href="#collapseThree">
+                    Javascript Challenges
+                </a>
+            </h4>
+        </div>
+        <div id="collapseThree" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <ul class="list-group">
+                    <a href="/problem.html?problem={{problem.problem_id}}" class="list-group-item" ng-repeat="problem in js_problems">
+                        <span class="badge">{{problem.solution_state}}</span>
+                        {{problem.problem_name}}
+                    </a>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/angular.min.js"></script>
+<script src="js/angular-sanitize.min.js"></script>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scoreboard.js"></script>
+<script src="js/index.js"></script>
+
+</body>
+</html>
