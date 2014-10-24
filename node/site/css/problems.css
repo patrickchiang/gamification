@@ -22,6 +22,11 @@ body {
     padding: 0;
 }
 
+.problem-right {
+    overflow-y: auto;
+    height: 100vh;
+}
+
 .logo, .scoreboard {
     display: block;
 }
@@ -112,4 +117,8 @@ body {
 .debug-success {
     background-color: #5cb85c;
     color: white;
+}
+
+a.red-color {
+    color: red;
 }

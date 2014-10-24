@@ -1,3 +1,5 @@
+var problem_type;
+
 app.controller('ProblemController', ['$scope', '$sce', '$http', function ($scope, $sce, $http) {
     var number = location.search.replace('?problem=', '');
     if (number == '') {
@@ -5,7 +7,8 @@ app.controller('ProblemController', ['$scope', '$sce', '$http', function ($scope
     }
 
     var problem_range = function () {
-        var responsePromise = $http.get("/getProblemNumberRange?id=" + number);
+        console.log("Problem type: " + problem_type);
+        var responsePromise = $http.get("/getProblemNumberRange?id=" + number + "&type=" + problem_type);
 
         responsePromise.success(function (data, status, headers, config) {
             $scope.range = data;
@@ -39,7 +42,6 @@ app.controller('ProblemController', ['$scope', '$sce', '$http', function ($scope
 
     var init = function () {
         var responsePromise = $http.get("/getProblemById?id=" + number);
-        console.log('help');
 
         responsePromise.success(function (data, status, headers, config) {
             if (data.solution_state == null) {
@@ -52,6 +54,7 @@ app.controller('ProblemController', ['$scope', '$sce', '$http', function ($scope
             $scope.problem_default_before = $sce.trustAsHtml(data.problem_default_before);
             $scope.problem_default_after = $sce.trustAsHtml(data.problem_default_after);
             $scope.points = data.problem_points;
+            problem_type  = data.problem_type;
 
             $scope.coded = data.solution;
             $scope.solution_state = data.solution_state;
@@ -87,13 +90,13 @@ app.controller('ProblemController', ['$scope', '$sce', '$http', function ($scope
 
                 new_solution();
             }
+
+            problem_range();
         });
         responsePromise.error(function (data, status, headers, config) {
             console.log('Problem does not exist!');
             window.location.replace('/');
         });
-
-        problem_range();
     }
     init();
 }]);

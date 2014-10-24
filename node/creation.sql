@@ -20,7 +20,7 @@ CONSTRAINT unique_name UNIQUE (first_name, last_name)
 CREATE TABLE problems
 (
 problem_id int NOT NULL AUTO_INCREMENT,
-problem_type int NOT NULL,
+problem_type varchar(64) NOT NULL,
 problem_name varchar(32) NOT NULL,
 problem_prompt varchar(2048),
 problem_expected varchar(2048),

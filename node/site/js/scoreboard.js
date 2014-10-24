@@ -1,4 +1,4 @@
-var app = angular.module('house', ['ngSanitize']);
+var app = angular.module('house', ['ngSanitize', 'angular.filter']);
 
 app.controller('ScoreController', ['$scope', '$http', function ($scope, $http) {
     var init = function () {

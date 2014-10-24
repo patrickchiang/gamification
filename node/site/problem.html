@@ -32,9 +32,17 @@
             <a href="/problem.html?problem={{range.next}}">Next Question <span
                     class="glyphicon glyphicon-chevron-right"></span></a>
         </div>
+        <div class="next" ng-if="range.next == 0">
+            <a href="/" class="red-color">Back to Index <span
+                    class="glyphicon glyphicon-chevron-right"></span></a>
+        </div>
         <div class="previous" ng-if="range.previous != 0">
             <a href="/problem.html?problem={{range.previous}}"><span class="glyphicon glyphicon-chevron-left"></span>
                 Previous Question</a>
+        </div>
+        <div class="previous" ng-if="range.previous == 0">
+            <a href="/" class="red-color"><span class="glyphicon glyphicon-chevron-left"></span>
+                Back to Index</a>
         </div>
     </div>
 
@@ -95,6 +103,7 @@
 </div>
 
 <script src="js/angular.min.js"></script>
+<script src="js/angular-filter.min.js"></script>
 <script src="js/angular-sanitize.min.js"></script>
 <script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>

@@ -132,7 +132,7 @@ app.get('/admin', function (req, res) {
     res.sendFile(__dirname + '/site/admin.html');
 });
 
-app.post('/login-admin', passport.authenticate('local-admin'), function(req, res){
+app.post('/login-admin', passport.authenticate('local-admin'), function (req, res) {
     res.json(req.user);
 });
 
@@ -150,7 +150,7 @@ app.post('/register', function (req, res) {
         else {
             passport.authenticate('local-user')(req, res, function () {
                 res.redirect('/');
-            });
+            }); //TODO: async npm
         }
     });
     connection.end();
@@ -217,9 +217,9 @@ function rank(a, b) {
 app.get('/getAllProblemProgress', ensureAuthenticated, function (req, res) {
 
     var sql = "select p.problem_id, p.problem_name, u.solution_state FROM problems p JOIN users_problems u "
-        + "ON p.problem_id = u.problem_id WHERE p.problem_type = ? AND u.user_id = ?; "
-        + "select problem_id, p.problem_name, p.problem_points from problems p WHERE p.problem_type = ?;";
-    var insert = [req.query.id, req.user.user_id, req.query.id];
+        + "ON p.problem_id = u.problem_id WHERE u.user_id = ?; "
+        + "select p.problem_id, p.problem_name, p.problem_points, p.problem_type from problems p;";
+    var insert = [req.user.user_id];
     sql = mysql.format(sql, insert);
 
     var connection = mysql.createConnection(mysql_config);
@@ -274,16 +274,15 @@ app.get('/getProblemByID', ensureAuthenticated, function (req, res) {
 });
 
 app.get('/getProblemNumberRange', ensureAuthenticated, function (req, res) {
-    var sql = "SELECT problem_id FROM problems WHERE problem_id > ? ORDER BY problem_id ASC LIMIT 1; "
-        + "SELECT problem_id FROM problems WHERE problem_id < ? ORDER BY problem_id DESC LIMIT 1;";
-    var insert = [req.query.id, req.query.id];
+    var sql = "SELECT problem_id FROM problems WHERE problem_id > ? AND problem_type = ? ORDER BY problem_id ASC LIMIT 1; "
+        + "SELECT problem_id FROM problems WHERE problem_id < ? AND problem_type = ? ORDER BY problem_id DESC LIMIT 1;";
+    var insert = [req.query.id, req.query.type, req.query.id, req.query.type];
     sql = mysql.format(sql, insert);
 
     var connection = mysql.createConnection(mysql_config);
     connection.connect();
     connection.query(sql, function (err, results) {
         var previous = 0, next = 0;
-
         if (results[0] != null && results[0][0] != null)
             next = results[0][0].problem_id;
         if (results[1] != null && results[1][0] != null)
